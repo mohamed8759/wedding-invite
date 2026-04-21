@@ -137,7 +137,7 @@ export default function Home() {
 
         {/* 📍 Details */}
         <div className="mb-6 space-y-2 text-sm text-gray-700">
-          <p> السبت 25 أبريل 2026 - الساعة 4 مساءً</p>
+          <p> السبت 25 أبريل 2026 - الساعة 7 مساءً</p>
           <p>📍 قاعة ليالي - كرداسة</p>
         </div>
 
