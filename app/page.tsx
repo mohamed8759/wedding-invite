@@ -33,13 +33,17 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // 🎆 Confetti
+  // 🎆 Confetti كل شوية
   useEffect(() => {
-    confetti({
-      particleCount: 120,
-      spread: 90,
-      origin: { y: 0.6 },
-    });
+    const interval = setInterval(() => {
+      confetti({
+        particleCount: 70,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    }, 9000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // 🔊 تشغيل الصوت بعد أول تفاعل
@@ -69,89 +73,115 @@ export default function Home() {
   const seconds = Math.floor((timeLeft / 1000) % 60);
 
   const boxStyle =
-    "bg-white/40 backdrop-blur-xl rounded-2xl p-4 w-24 shadow-xl border border-white/20 hover:scale-110 transition";
+    "bg-white/70 backdrop-blur-xl rounded-xl p-3 w-20 shadow-md border border-white/40 hover:scale-110 transition-all duration-300";
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-pink-300 via-rose-200 to-white bg-[length:200%_200%] animate-[gradientMove_8s_ease_infinite] text-gray-800">
+    <main className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-rose-100 via-pink-200 to-rose-50 bg-[length:300%_300%] animate-gradientMove text-gray-800">
 
-      <div className="text-center max-w-md w-full bg-white/40 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/20">
+      <div className="text-center max-w-md w-full bg-white/70 backdrop-blur-2xl rounded-[2rem] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-white/30 animate-float">
 
-        {/* 🎬 Video Header */}
-        <div className="mb-6 rounded-3xl overflow-hidden shadow-2xl border border-white/30">
+        {/* 🎬 Video */}
+        <div className="mb-6 rounded-3xl overflow-hidden shadow-xl border border-white/30">
           <video
             src="/video.mp4"
             autoPlay
             muted
             loop
             playsInline
-            className="w-full h-56 object-cover"
+            className="w-full h-52 object-cover scale-105 hover:scale-110 transition duration-700"
           />
         </div>
 
-        {/* Title */}
-        <h1 className="text-5xl font-extrabold mb-2 tracking-wide">
-          Khaled <span className="animate-pulse">❤️</span> Mariam
+        {/* ❤️ Title */}
+        <h1 className="flex items-center justify-center gap-2 text-2xl sm:text-3xl md:text-4xl font-bold mb-3 whitespace-nowrap">
+          <span>Khaled</span>
+          <span className="animate-heartbeat text-rose-500 text-xl sm:text-2xl">❤️</span>
+          <span>Mariam</span>
         </h1>
 
-        <p className="text-sm opacity-70 mb-6">
+        <p className="text-sm opacity-70 mb-5">
           Engagement Invitation
         </p>
 
-        {/* Text */}
-        <p className="mb-6 leading-relaxed">
+        {/* 📜 Text */}
+        <p className="mb-6 leading-relaxed text-sm sm:text-base text-gray-700">
           الحمد لله الذي جمع بين القلوب بالمودة والرحمة
           <br />
-          ندعوكم لحضور حفل خطوبتنا 🎉
+          نتشرف بدعوتكم لحضور حفل خطوبتنا 🎉
         </p>
 
-        {/* Countdown */}
+        {/* ⏳ Countdown */}
         <div className="flex justify-center gap-3 mb-6">
 
           <div className={boxStyle}>
-            <p className="text-3xl font-extrabold">{days}</p>
+            <p className="text-xl font-extrabold animate-pulse">{days}</p>
             <span className="text-xs">يوم</span>
           </div>
 
           <div className={boxStyle}>
-            <p className="text-3xl font-extrabold">{hours}</p>
+            <p className="text-xl font-extrabold animate-pulse">{hours}</p>
             <span className="text-xs">ساعة</span>
           </div>
 
           <div className={boxStyle}>
-            <p className="text-3xl font-extrabold">{minutes}</p>
+            <p className="text-xl font-extrabold animate-pulse">{minutes}</p>
             <span className="text-xs">دقيقة</span>
           </div>
 
           <div className={boxStyle}>
-            <p className="text-3xl font-extrabold">{seconds}</p>
+            <p className="text-xl font-extrabold animate-pulse">{seconds}</p>
             <span className="text-xs">ثانية</span>
           </div>
 
         </div>
 
-        {/* Details */}
-        <div className="mb-6 space-y-1">
-          <p>📅 السبت 25-4-2026 - الساعة 4 مساءً</p>
+        {/* 📍 Details */}
+        <div className="mb-6 space-y-2 text-sm text-gray-700">
+          <p>📅 السبت 25 أبريل 2026 - الساعة 4 مساءً</p>
           <p>📍 قاعة ليالي - كرداسة</p>
         </div>
 
-        {/* Button */}
+        {/* 🔗 Button */}
         <a
           href="https://maps.app.goo.gl/PHHJLi94N3wEkFTz5?g_st=aw"
           target="_blank"
-          className="inline-block bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-3 rounded-full shadow-2xl hover:scale-110 hover:shadow-pink-300/50 transition-all duration-300"
+          className="inline-block bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 text-white px-8 py-3 rounded-full shadow-lg hover:scale-110 hover:shadow-pink-400/40 transition-all duration-300 font-semibold"
         >
           📍 عرض اللوكيشن
         </a>
 
       </div>
 
-      {/* Background Animation */}
+      {/* 🎨 Animations */}
       <style jsx global>{`
         @keyframes gradientMove {
           0% { background-position: 0% 50% }
           50% { background-position: 100% 50% }
           100% { background-position: 0% 50% }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+
+        @keyframes heartbeat {
+          0%, 100% { transform: scale(1); }
+          25% { transform: scale(1.15); }
+          50% { transform: scale(1); }
+          75% { transform: scale(1.15); }
+        }
+
+        .animate-float {
+          animation: float 4s ease-in-out infinite;
+        }
+
+        .animate-gradientMove {
+          animation: gradientMove 10s ease infinite;
+        }
+
+        .animate-heartbeat {
+          animation: heartbeat 1.2s infinite;
         }
       `}</style>
 
