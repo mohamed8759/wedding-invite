@@ -4,49 +4,76 @@ import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 
 export default function Home() {
-  function getNextSaturdayAt4PM() {
+  function getNextSaturdayAt7PM() {
     const now = new Date();
     const day = now.getDay();
 
     let daysUntilSaturday = (6 - day + 7) % 7;
 
-    if (daysUntilSaturday === 0 && now.getHours() >= 16) {
+    // لو السبت وعدينا 7 مساءً نروح للأسبوع اللي بعده
+    if (daysUntilSaturday === 0 && now.getHours() >= 19) {
       daysUntilSaturday = 7;
     }
 
     const nextSaturday = new Date(now);
     nextSaturday.setDate(now.getDate() + daysUntilSaturday);
-    nextSaturday.setHours(16, 0, 0, 0);
+    nextSaturday.setHours(19, 0, 0, 0);
 
     return nextSaturday.getTime();
   }
 
   const [timeLeft, setTimeLeft] = useState(0);
+  const [isEventLive, setIsEventLive] = useState(false);
+  const [isEventEnded, setIsEventEnded] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const target = getNextSaturdayAt4PM();
-      const now = new Date().getTime();
-      setTimeLeft(target - now);
+      const now = new Date();
+      const day = now.getDay();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      const isSaturday = day === 6;
+
+      const after7PM = hours >= 19;
+      const before1030 =
+        hours < 22 || (hours === 22 && minutes <= 30);
+
+      const after1030 =
+        hours > 22 || (hours === 22 && minutes > 30);
+
+      if (isSaturday && after7PM && before1030) {
+        setIsEventLive(true);
+        setIsEventEnded(false);
+      } else if (isSaturday && after1030) {
+        setIsEventLive(false);
+        setIsEventEnded(true);
+      } else {
+        setIsEventLive(false);
+        setIsEventEnded(false);
+      }
+
+      const target = getNextSaturdayAt7PM();
+      setTimeLeft(target - now.getTime());
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  // 🎆 Confetti كل شوية
+  // 🎆 Confetti أسرع
   useEffect(() => {
     const interval = setInterval(() => {
       confetti({
-        particleCount: 70,
-        spread: 70,
+        particleCount: 90,
+        spread: 80,
         origin: { y: 0.6 },
       });
-    }, 3000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // 🔊 تشغيل الصوت بعد أول تفاعل
+  // 🔊 الصوت
   useEffect(() => {
     const video = document.querySelector("video");
 
@@ -68,7 +95,7 @@ export default function Home() {
   }, []);
 
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+  const hoursLeft = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
   const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
   const seconds = Math.floor((timeLeft / 1000) % 60);
 
@@ -110,30 +137,40 @@ export default function Home() {
           نتشرف بدعوتكم لحضور حفل خطوبتنا 🎉
         </p>
 
-        {/* ⏳ Countdown */}
-        <div className="flex justify-center gap-3 mb-6">
+        {/* ⏳ الحالات */}
+        {!isEventLive && !isEventEnded ? (
+          <div className="flex justify-center gap-3 mb-6">
 
-          <div className={boxStyle}>
-            <p className="text-xl font-extrabold animate-pulse">{days}</p>
-            <span className="text-xs">يوم</span>
+            <div className={boxStyle}>
+              <p className="text-xl font-extrabold animate-pulse">{days}</p>
+              <span className="text-xs">يوم</span>
+            </div>
+
+            <div className={boxStyle}>
+              <p className="text-xl font-extrabold animate-pulse">{hoursLeft}</p>
+              <span className="text-xs">ساعة</span>
+            </div>
+
+            <div className={boxStyle}>
+              <p className="text-xl font-extrabold animate-pulse">{minutes}</p>
+              <span className="text-xs">دقيقة</span>
+            </div>
+
+            <div className={boxStyle}>
+              <p className="text-xl font-extrabold animate-pulse">{seconds}</p>
+              <span className="text-xs">ثانية</span>
+            </div>
+
           </div>
-
-          <div className={boxStyle}>
-            <p className="text-xl font-extrabold animate-pulse">{hours}</p>
-            <span className="text-xs">ساعة</span>
+        ) : isEventLive ? (
+          <div className="mb-6 text-lg font-bold text-rose-600 animate-pulse">
+            💍 الخطوبة شغالة دلوقتي وهتخلص 10 ونص... الحق تعالى!
           </div>
-
-          <div className={boxStyle}>
-            <p className="text-xl font-extrabold animate-pulse">{minutes}</p>
-            <span className="text-xs">دقيقة</span>
+        ) : (
+          <div className="mb-6 text-lg font-bold text-green-600 animate-pulse">
+            🎉 خلصت الخطوبة شكراً ليكم ❤️
           </div>
-
-          <div className={boxStyle}>
-            <p className="text-xl font-extrabold animate-pulse">{seconds}</p>
-            <span className="text-xs">ثانية</span>
-          </div>
-
-        </div>
+        )}
 
         {/* 📍 Details */}
         <div className="mb-6 space-y-2 text-sm text-gray-700">
